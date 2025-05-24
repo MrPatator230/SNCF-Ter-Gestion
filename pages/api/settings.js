@@ -27,9 +27,11 @@ export default function handler(req, res) {
   } else if (req.method === 'POST') {
     try {
       const settings = req.body;
+      console.log('Received settings:', settings);
       fs.writeFileSync(settingsFilePath, JSON.stringify(settings, null, 2));
       res.status(200).json({ message: 'Settings saved successfully' });
     } catch (error) {
+      console.error('Error saving settings:', error);
       res.status(500).json({ error: 'Failed to save settings' });
     }
   } else {
