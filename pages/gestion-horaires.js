@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import Layout from '../../components/Layout';
-import { getAllSchedules, updateSchedule } from '../../utils/scheduleUtils';
+import Layout from '../components/Layout';
+import { getAllSchedules, updateSchedule } from '../utils/scheduleUtils';
 
 export default function GestionHoraires() {
   const [schedules, setSchedules] = useState([]);
