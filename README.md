@@ -18,16 +18,16 @@ Des tutos sont disponibles entre parenthèses pour pouvoir l'installer (pour les
 
 Une fois les prérequis installés, télécharger le git : 
 
-    git clone https://github.com/MrPatator230/Application-de-gestion-de-circulation-ferroviaire.git
+    git clone https://github.com/MrPatator230/SNCF-Ter-Gestion
 
 [OPTIONNEL] Renommez le dossier : 
 
-    mv Application-de-gestion-de-circulation-ferroviaire (nom que vous voulez)
+    mv SNCF-Ter-Gestion (nom que vous voulez)
 
 Puis ensuite ce diriger sur le dossier : 
 
     cd [nom de votre dossier ]
-    cd Application-de-gestion-de-circulation-ferroviaire
+    cd SNCF-Ter-Gestion
 
 En étant dans le dossier, on fait : 
 
