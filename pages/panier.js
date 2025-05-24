@@ -1,7 +1,7 @@
 import { useState, useEffect, useContext } from 'react';
 import { useRouter } from 'next/router';
 import Layout from '../components/Layout';
-import { AuthContext } from './_app';
+import { AuthContext } from '../src/contexts/AuthContext';
 
 export default function Panier() {
   const router = useRouter();

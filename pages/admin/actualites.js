@@ -1,6 +1,6 @@
 import { useState, useEffect, useContext } from 'react';
 import Sidebar from '../../components/Sidebar';
-import { AuthContext } from '../_app';
+import { AuthContext } from '../../src/contexts/AuthContext';
 
 export default function Actualites() {
   const { role, isAuthenticated } = useContext(AuthContext);

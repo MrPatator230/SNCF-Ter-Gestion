@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@sncf/bootstrap-sncf.metier": "^4.3.1-r5",
+    "@swc/helpers": "^0.5.17",
     "bootstrap": "^5.3.6",
     "date-fns": "^4.1.0",
     "mdb-react-ui-kit": "^9.0.0",
