@@ -1,7 +1,7 @@
 import { useState, useEffect, useContext } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { AuthContext } from './_app';
+import { AuthContext } from '../src/contexts/AuthContext';
 import Header from '../components/Header';
 
 export default function AbonnementsEtBillets() {

@@ -1,6 +1,6 @@
 import { useState, useContext } from 'react';
 import { useRouter } from 'next/router';
-import { AuthContext } from './_app';
+import { AuthContext } from '../src/contexts/AuthContext';
 import Link from 'next/link';
 
 export default function Register() {
