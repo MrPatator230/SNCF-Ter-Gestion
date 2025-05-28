@@ -1,10 +1,11 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { AuthContext } from '../src/contexts/AuthContext';
 import { SettingsContext } from '../contexts/SettingsContext';
 import styles from '../styles/operatorColors.module.css';
+import MobileMenuToggle from './MobileMenuToggle';
 
 export default function Header() {
   const getThemeClass = (logoUrl) => {
@@ -21,13 +22,64 @@ export default function Header() {
   const settings = useContext(SettingsContext) || {};
   const { logoUrl, appName } = settings;
 
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  const toggleMobileMenu = () => {
+    setMobileMenuOpen(!mobileMenuOpen);
+  };
+
+  const menuLinks = (
+    <>
+      <Link 
+        href="/" 
+        className={`nav-link ${currentPath === '/' ? 'active' : ''}`}
+        onClick={() => setMobileMenuOpen(false)}
+      >
+        Accueil
+      </Link>
+      
+      <Link 
+        href="/verifier-horaires" 
+        className={`nav-link ${currentPath === '/verifier-horaires' ? 'active' : ''}`}
+        onClick={() => setMobileMenuOpen(false)}
+      >
+        <span className="material-icons me-1">search</span>
+        Vérifier Horaires
+      </Link>
+
+      <Link 
+        href="/actualites" 
+        className={`nav-link ${currentPath === '/actualites' ? 'active' : ''}`}
+        onClick={() => setMobileMenuOpen(false)}
+      >
+        Actualités
+      </Link>
+
+      <Link 
+        href="/abonnements-et-billets" 
+        className={`nav-link ${currentPath === '/abonnements-et-billets' ? 'active' : ''}`}
+        onClick={() => setMobileMenuOpen(false)}
+      >
+        Abonnements & Billets
+      </Link>
+
+      <Link 
+        href="/horaires-par-gare" 
+        className={`nav-link ${currentPath === '/horaires-par-gare' ? 'active' : ''}`}
+        onClick={() => setMobileMenuOpen(false)}
+      >
+        Horaires par gare
+      </Link>
+    </>
+  );
+
   return (
     <header className={`mastheader bg-white shadow-sm ${getThemeClass(logoUrl)}`} style={{ fontFamily: "'SNCF', Arial, sans-serif" }}>
       <link rel="icon" href="../favicon.ico" />
       <div className="container-fluid">
         <div className="d-flex align-items-center py-2">
           <Link href="/" className="me-4" aria-label={appName || 'SNCF'}>
-          <Image
+            <Image
               src={logoUrl || '/images/sncf-logo.png'}
               alt={appName || 'Logo'}
               width={300}
@@ -36,43 +88,24 @@ export default function Header() {
             />
           </Link>
 
-          <nav className="nav flex-grow-1">
-            <Link 
-              href="/" 
-              className={`nav-link ${currentPath === '/' ? 'active' : ''}`}
-            >
-              Accueil
-            </Link>
-            
-            <Link 
-              href="/verifier-horaires" 
-              className={`nav-link ${currentPath === '/verifier-horaires' ? 'active' : ''}`}
-            >
-              <span className="material-icons me-1">search</span>
-              Vérifier Horaires
-            </Link>
-
-            <Link 
-              href="/actualites" 
-              className={`nav-link ${currentPath === '/actualites' ? 'active' : ''}`}
-            >
-              Actualités
-            </Link>
-
-            <Link 
-              href="/abonnements-et-billets" 
-              className={`nav-link ${currentPath === '/abonnements-et-billets' ? 'active' : ''}`}
-            >
-              Abonnements & Billets
-            </Link>
-
-            <Link 
-              href="/horaires-par-gare" 
-              className={`nav-link ${currentPath === '/horaires-par-gare' ? 'active' : ''}`}
-            >
-              Horaires par gare
-            </Link>
+          {/* Desktop and tablet menu - hidden on small screens */}
+          <nav className="nav flex-grow-1 d-none d-md-flex">
+            {menuLinks}
           </nav>
+
+          {/* Mobile menu toggle button - visible only on small screens */}
+          <div className="d-md-none me-3">
+            <button
+              className="btn btn-outline-primary"
+              onClick={toggleMobileMenu}
+              aria-label="Toggle menu"
+            >
+              <span className="material-icons">
+                {mobileMenuOpen ? 'close' : 'menu'}
+              </span>
+              <span className="ms-1">Menu</span>
+            </button>
+          </div>
 
           <div className="d-flex align-items-center">
             <Link href="/client/reservations" className="header-icon-link">
@@ -107,6 +140,24 @@ export default function Header() {
         </div>
       </div>
 
+      {/* Mobile menu popup */}
+      {mobileMenuOpen && (
+        <div className="mobile-menu-popup">
+          <div className="d-flex justify-content-end p-2">
+            <button
+              className="btn btn-outline-secondary"
+              onClick={() => setMobileMenuOpen(false)}
+              aria-label="Close menu"
+            >
+              <span className="material-icons">close</span>
+            </button>
+          </div>
+          <nav className="nav flex-column p-3">
+            {menuLinks}
+          </nav>
+        </div>
+      )}
+
       <style jsx>{`
         .nav-link.active {
           color: var(--primary-color);
@@ -122,6 +173,22 @@ export default function Header() {
         .header-icon-link small {
           margin-top: 0.25rem;
           font-size: 0.75rem;
+        }
+        .mobile-menu-popup {
+          position: fixed;
+          top: 56px; /* height of header */
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background: white;
+          z-index: 1050;
+          box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+          overflow-y: auto;
+        }
+        .mobile-menu-popup .nav-link {
+          font-size: 1.25rem;
+          padding: 1rem 0;
+          border-bottom: 1px solid #ddd;
         }
       `}</style>
     </header>
