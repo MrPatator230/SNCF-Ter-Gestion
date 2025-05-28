@@ -7,6 +7,15 @@ export function AuthProvider({ children }) {
   const [role, setRole] = useState(null);
   const [user, setUser] = useState(null);
 
+  // Initialize admin credentials in localStorage if not present
+  useEffect(() => {
+    const adminCreds = localStorage.getItem('adminCredentials');
+    if (!adminCreds) {
+      const defaultAdmin = { username: 'admin', password: 'admin' };
+      localStorage.setItem('adminCredentials', JSON.stringify(defaultAdmin));
+    }
+  }, []);
+
   useEffect(() => {
     const token = localStorage.getItem('authToken');
     const storedRole = localStorage.getItem('userRole');
@@ -18,12 +27,17 @@ export function AuthProvider({ children }) {
       const currentUser = users.find(u => u.username === storedUsername);
       if (currentUser) {
         setUser(currentUser);
+      } else if (storedRole === 'admin') {
+        // For admin, set user from stored admin credentials
+        const adminCreds = JSON.parse(localStorage.getItem('adminCredentials'));
+        setUser({ username: adminCreds.username, role: 'admin' });
       }
     }
   }, []);
 
   const login = (username, password) => {
-    if (username === 'admin' && password === 'admin') {
+    const adminCreds = JSON.parse(localStorage.getItem('adminCredentials'));
+    if (adminCreds && username === adminCreds.username && password === adminCreds.password) {
       localStorage.setItem('authToken', 'dummy-token');
       localStorage.setItem('userRole', 'admin');
       localStorage.setItem('username', username);
