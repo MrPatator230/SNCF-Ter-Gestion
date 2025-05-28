@@ -166,27 +166,35 @@ export default function Sidebar() {
                   <span>Liste annonces</span>
                 </Link>
               </div>
-            </div>
           </div>
+        </div>
 
-          <div className="sncf-nav-section">
-            <div className="sncf-nav-section-title">Système</div>
-            <Link 
-              href="/admin/sauvegarde" 
-              className={`sncf-nav-link ${currentPath === '/admin/sauvegarde' ? 'active' : ''}`}
-            >
-              <span className="material-icons">save</span>
-              <span>Sauvegarde</span>
-            </Link>
+        <div className="sncf-nav-section">
+          <div className="sncf-nav-section-title">Système</div>
+          <Link 
+            href="/admin/sauvegarde" 
+            className={`sncf-nav-link ${currentPath === '/admin/sauvegarde' ? 'active' : ''}`}
+          >
+            <span className="material-icons">save</span>
+            <span>Sauvegarde</span>
+          </Link>
 
-            <Link 
-              href="/admin/update" 
-              className={`sncf-nav-link ${currentPath === '/admin/update' ? 'active' : ''}`}
-            >
-              <span className="material-icons">system_update</span>
-              <span>Mise à jour</span>
-            </Link>
-          </div>
+          <Link 
+            href="/admin/admin-profile" 
+            className={`sncf-nav-link ${currentPath === '/admin/admin-profile' ? 'active' : ''}`}
+          >
+            <span className="material-icons">person</span>
+            <span>Profil Admin</span>
+          </Link>
+
+          <Link 
+            href="/admin/update" 
+            className={`sncf-nav-link ${currentPath === '/admin/update' ? 'active' : ''}`}
+          >
+            <span className="material-icons">system_update</span>
+            <span>Mise à jour</span>
+          </Link>
+        </div>
         </div>
       </div>
 
