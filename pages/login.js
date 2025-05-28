@@ -1,6 +1,6 @@
 import { useState, useContext } from 'react';
 import { useRouter } from 'next/router';
-import { AuthContext } from '../../src/contexts/AuthContext';
+import { AuthContext } from '../src/contexts/AuthContext';
 
 export default function Login() {
   const [username, setUsername] = useState('');
