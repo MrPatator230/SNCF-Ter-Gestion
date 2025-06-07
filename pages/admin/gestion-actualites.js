@@ -2,7 +2,7 @@ import { useState, useEffect, useContext } from 'react';
 import Sidebar from '../../components/Sidebar';
 import { AuthContext } from '../../src/contexts/AuthContext';
 
-export default function Actualites() {
+export default function GestionActualites() {
   const { role, isAuthenticated } = useContext(AuthContext);
 
   const [newsPosts, setNewsPosts] = useState([]);
@@ -10,9 +10,9 @@ export default function Actualites() {
   const [form, setForm] = useState({
     id: null,
     title: '',
-    content: '',
     date: '',
     scheduled: false,
+    content: '',
     icon: null,
     attachments: [],
   });
@@ -78,9 +78,9 @@ export default function Actualites() {
     setForm({
       id: null,
       title: '',
-      content: '',
       date: '',
       scheduled: false,
+      content: '',
       icon: null,
       attachments: [],
     });
@@ -92,9 +92,9 @@ export default function Actualites() {
     setForm({
       id: post.id,
       title: post.title,
-      content: post.content,
       date: post.date,
       scheduled: post.scheduled || false,
+      content: post.content,
       icon: null,
       attachments: [],
     });
@@ -151,6 +151,18 @@ export default function Actualites() {
               />
             </div>
             <div className="mb-3">
+              <label htmlFor="content" className="form-label">Contenu</label>
+              <textarea
+                id="content"
+                name="content"
+                className="form-control"
+                rows="5"
+                value={form.content}
+                onChange={handleInputChange}
+                required
+              />
+            </div>
+            <div className="mb-3">
               <label htmlFor="icon" className="form-label">Icône de l'article</label>
               <input
                 type="file"
@@ -181,7 +193,21 @@ export default function Actualites() {
               {form.attachments.length > 0 && (
                 <ul className="list-group mt-2">
                   {form.attachments.map((file, index) => (
-                    <li key={index} className="list-group-item">{file.name}</li>
+                    <li key={index} className="list-group-item d-flex align-items-center">
+                      <input
+                        type="text"
+                        className="form-control form-control-sm me-2"
+                        value={file.name}
+                        onChange={(e) => {
+                          const newName = e.target.value;
+                          setForm(prev => {
+                            const newAttachments = [...prev.attachments];
+                            newAttachments[index] = new File([file], newName, { type: file.type });
+                            return { ...prev, attachments: newAttachments };
+                          });
+                        }}
+                      />
+                    </li>
                   ))}
                 </ul>
               )}
@@ -198,9 +224,9 @@ export default function Actualites() {
                   setForm({
                     id: null,
                     title: '',
-                    content: '',
                     date: '',
                     scheduled: false,
+                    content: '',
                     icon: null,
                     attachments: [],
                   });
@@ -230,7 +256,7 @@ export default function Actualites() {
                 {newsPosts.map(post => (
                   <tr key={post.id}>
                     <td><strong>{post.title}</strong></td>
-                    <td>{new Date(post.date).toLocaleDateString()}</td>
+                    <td>{post.date && !isNaN(new Date(post.date)) ? new Date(post.date).toLocaleDateString() : ''}</td>
                     <td>{post.scheduled ? 'Oui' : 'Non'}</td>
                     <td>
                       {post.icon ? (
