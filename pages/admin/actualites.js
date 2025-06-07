@@ -12,6 +12,9 @@ export default function Actualites() {
     title: '',
     content: '',
     date: '',
+    scheduled: false,
+    icon: null,
+    attachments: [],
   });
 
   useEffect(() => {
@@ -34,30 +37,67 @@ export default function Actualites() {
   };
 
   const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setForm(prev => ({ ...prev, [name]: value }));
+    const { name, value, type, checked, files } = e.target;
+    if (type === 'checkbox') {
+      setForm(prev => ({ ...prev, [name]: checked }));
+    } else if (type === 'file') {
+      if (name === 'icon') {
+        const file = files[0];
+        setForm(prev => ({ ...prev, icon: file }));
+      } else if (name === 'attachments') {
+        const fileList = Array.from(files);
+        setForm(prev => ({ ...prev, attachments: fileList }));
+      }
+    } else {
+      setForm(prev => ({ ...prev, [name]: value }));
+    }
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!form.title || !form.content || !form.date) {
-      alert('Veuillez remplir tous les champs.');
+    if (!form.title || !form.content || (!form.date && form.scheduled)) {
+      alert('Veuillez remplir tous les champs requis.');
       return;
     }
+    const postToSave = {
+      ...form,
+      id: editingPost ? editingPost.id : Date.now(),
+      icon: form.icon ? URL.createObjectURL(form.icon) : editingPost ? editingPost.icon : null,
+      attachments: form.attachments.length > 0 ? form.attachments.map(file => ({
+        name: file.name,
+        url: URL.createObjectURL(file),
+      })) : editingPost ? editingPost.attachments : [],
+    };
+    let updatedPosts;
     if (editingPost) {
-      const updatedPosts = newsPosts.map(post => post.id === editingPost.id ? form : post);
-      saveNewsPosts(updatedPosts);
+      updatedPosts = newsPosts.map(post => post.id === editingPost.id ? postToSave : post);
     } else {
-      const newPost = { ...form, id: Date.now() };
-      saveNewsPosts([newPost, ...newsPosts]);
+      updatedPosts = [postToSave, ...newsPosts];
     }
-    setForm({ id: null, title: '', content: '', date: '' });
+    saveNewsPosts(updatedPosts);
+    setForm({
+      id: null,
+      title: '',
+      content: '',
+      date: '',
+      scheduled: false,
+      icon: null,
+      attachments: [],
+    });
     setEditingPost(null);
   };
 
   const handleEdit = (post) => {
     setEditingPost(post);
-    setForm(post);
+    setForm({
+      id: post.id,
+      title: post.title,
+      content: post.content,
+      date: post.date,
+      scheduled: post.scheduled || false,
+      icon: null,
+      attachments: [],
+    });
   };
 
   const handleDelete = (id) => {
@@ -86,6 +126,17 @@ export default function Actualites() {
                 required
               />
             </div>
+            <div className="mb-3 form-check">
+              <input
+                type="checkbox"
+                id="scheduled"
+                name="scheduled"
+                className="form-check-input"
+                checked={form.scheduled}
+                onChange={handleInputChange}
+              />
+              <label htmlFor="scheduled" className="form-check-label">Programmer la publication</label>
+            </div>
             <div className="mb-3">
               <label htmlFor="date" className="form-label">Date</label>
               <input
@@ -95,20 +146,45 @@ export default function Actualites() {
                 className="form-control"
                 value={form.date}
                 onChange={handleInputChange}
-                required
+                required={form.scheduled}
+                disabled={!form.scheduled}
               />
             </div>
             <div className="mb-3">
-              <label htmlFor="content" className="form-label">Contenu</label>
-              <textarea
-                id="content"
-                name="content"
+              <label htmlFor="icon" className="form-label">Icône de l'article</label>
+              <input
+                type="file"
+                id="icon"
+                name="icon"
                 className="form-control"
-                rows="5"
-                value={form.content}
+                accept="image/*"
                 onChange={handleInputChange}
-                required
               />
+              {form.icon && (
+                <img
+                  src={URL.createObjectURL(form.icon)}
+                  alt="Icon preview"
+                  style={{ maxWidth: '100px', marginTop: '10px' }}
+                />
+              )}
+            </div>
+            <div className="mb-3">
+              <label htmlFor="attachments" className="form-label">Fichiers joints</label>
+              <input
+                type="file"
+                id="attachments"
+                name="attachments"
+                className="form-control"
+                multiple
+                onChange={handleInputChange}
+              />
+              {form.attachments.length > 0 && (
+                <ul className="list-group mt-2">
+                  {form.attachments.map((file, index) => (
+                    <li key={index} className="list-group-item">{file.name}</li>
+                  ))}
+                </ul>
+              )}
             </div>
             <button type="submit" className="btn btn-primary">
               {editingPost ? 'Mettre à jour' : 'Créer'}
@@ -119,7 +195,15 @@ export default function Actualites() {
                 className="btn btn-secondary ms-2"
                 onClick={() => {
                   setEditingPost(null);
-                  setForm({ id: null, title: '', content: '', date: '' });
+                  setForm({
+                    id: null,
+                    title: '',
+                    content: '',
+                    date: '',
+                    scheduled: false,
+                    icon: null,
+                    attachments: [],
+                  });
                 }}
               >
                 Annuler
@@ -131,17 +215,51 @@ export default function Actualites() {
           {newsPosts.length === 0 ? (
             <p>Aucune actualité enregistrée.</p>
           ) : (
-            <div className="list-group">
-              {newsPosts.map(post => (
-                <div key={post.id} className="list-group-item">
-                  <h5>{post.title}</h5>
-                  <small className="text-muted">{new Date(post.date).toLocaleDateString()}</small>
-                  <p>{post.content.length > 200 ? post.content.substring(0, 200) + '...' : post.content}</p>
-                  <button className="btn btn-sm btn-warning me-2" onClick={() => handleEdit(post)}>Modifier</button>
-                  <button className="btn btn-sm btn-danger" onClick={() => handleDelete(post.id)}>Supprimer</button>
-                </div>
-              ))}
-            </div>
+            <table className="table table-striped">
+              <thead>
+                <tr>
+                  <th>Titre</th>
+                  <th>Date</th>
+                  <th>Programmé</th>
+                  <th>Icône</th>
+                  <th>Fichiers joints</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {newsPosts.map(post => (
+                  <tr key={post.id}>
+                    <td><strong>{post.title}</strong></td>
+                    <td>{new Date(post.date).toLocaleDateString()}</td>
+                    <td>{post.scheduled ? 'Oui' : 'Non'}</td>
+                    <td>
+                      {post.icon ? (
+                        <img src={post.icon} alt="Icon" style={{ maxWidth: '50px' }} />
+                      ) : (
+                        '-'
+                      )}
+                    </td>
+                    <td>
+                      {post.attachments && post.attachments.length > 0 ? (
+                        <ul>
+                          {post.attachments.map((file, idx) => (
+                            <li key={idx}>
+                              <a href={file.url} target="_blank" rel="noopener noreferrer">{file.name}</a>
+                            </li>
+                          ))}
+                        </ul>
+                      ) : (
+                        '-'
+                      )}
+                    </td>
+                    <td>
+                      <button className="btn btn-sm btn-warning me-2" onClick={() => handleEdit(post)}>Modifier</button>
+                      <button className="btn btn-sm btn-danger" onClick={() => handleDelete(post.id)}>Supprimer</button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           )}
         </div>
       </div>

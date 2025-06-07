@@ -4,6 +4,7 @@ import Sidebar from '../../components/Sidebar';
 import { AuthContext } from '../../src/contexts/AuthContext';
 import { getAllSchedules, addSchedule, updateSchedule, deleteSchedule } from '../../utils/scheduleUtils';
 import TrainVisualSlider from '../../components/TrainVisualSlider';
+import Layout from '@/components/Layout';
 
 const WEEK_DAYS = [
   { label: 'Lundi', value: 'Monday' },
@@ -223,6 +224,8 @@ export default function Horaires() {
 
   return (
     <div id="wrapper" style={{ display: 'flex', minHeight: '100vh' }}>
+      <meta charSet="UTF-8" />
+      <style href='../../node_modules/@sncf/bootstrap-sncf.min.css'></style>
       <div style={{ height: '100vh', overflowY: 'auto' }}>
         <Sidebar />
       </div>

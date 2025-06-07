@@ -2,7 +2,6 @@
   "/_app": "pages/_app.js",
   "/_error": "pages/_error.js",
   "/_document": "pages/_document.js",
-  "/admin": "pages/admin.js",
-  "/admin/gestion-horaires": "pages/admin/gestion-horaires.js",
-  "/admin/horaires": "pages/admin/horaires.js"
+  "/admin/compositions-trains": "pages/admin/compositions-trains.js",
+  "/admin": "pages/admin.js"
 }

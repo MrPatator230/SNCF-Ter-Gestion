@@ -1,3 +1,4 @@
+
 import { useState, useEffect, useContext } from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
@@ -6,11 +7,13 @@ import DraggableRollingStock from '../../components/admin/DraggableRollingStock'
 import CompositionDropZone from '../../components/admin/CompositionDropZone';
 import TrainVisualSlider from '../../components/TrainVisualSlider';
 import { SettingsContext } from '../../contexts/SettingsContext';
+import { extractStationsFromSchedule } from '../../utils/stationUtils';
 
 export default function CompositionsTrains() {
   const { primaryColor, buttonStyle } = useContext(SettingsContext);
   const [schedules, setSchedules] = useState([]);
   const [selectedSchedule, setSelectedSchedule] = useState(null);
+  const [computedStations, setComputedStations] = useState([]);
   const [materielsRoulants, setMaterielsRoulants] = useState([]);
   const [composition, setComposition] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
@@ -51,12 +54,14 @@ export default function CompositionsTrains() {
     if (schedule) {
       setSelectedSchedule(schedule);
       setComposition(schedule?.composition || []);
+      setComputedStations(extractStationsFromSchedule(schedule));
       setError('');
       setShowTrainVisual(false);
     } else {
       setError('Numéro de train non trouvé');
       setSelectedSchedule(null);
       setComposition([]);
+      setComputedStations([]);
       setShowTrainVisual(false);
     }
   };
@@ -333,23 +338,17 @@ export default function CompositionsTrains() {
                       Arrêts desservis
                     </h2>
                     <div className="timeline">
-                      {selectedSchedule.stops?.map((stop, index) => (
-                        <div key={index} className="timeline-item">
-                          <div className="timeline-content">
-                            <div className="d-flex justify-content-between align-items-center mb-2">
-                              <strong style={{ color: primaryColor }}>{stop.station}</strong>
-                              <span className="text-muted small">
-                                {stop.arrivalTime || stop.departureTime}
-                              </span>
+                      {computedStations.length > 0 ? (
+                        computedStations.map((station, index) => (
+                          <div key={index} className="timeline-item">
+                            <div className="timeline-content">
+                              <strong style={{ color: primaryColor }}>{station}</strong>
                             </div>
-                            {stop.platform && (
-                              <span className="badge bg-light text-dark">
-                                Voie {stop.platform}
-                              </span>
-                            )}
                           </div>
-                        </div>
-                      ))}
+                        ))
+                      ) : (
+                        <p>Aucune gare desservie disponible.</p>
+                      )}
                     </div>
                   </div>
                 </div>

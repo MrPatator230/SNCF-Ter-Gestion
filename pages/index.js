@@ -3,6 +3,7 @@ import { useContext } from 'react';
 import { SettingsContext } from '../contexts/SettingsContext';
 import buttonStyles from '../styles/buttons.module.css';
 import Footer from '../components/Footer';
+import Layout from '../components/Layout';
 
 
 const logoNameMap = {
@@ -26,8 +27,7 @@ export default function Home() {
   return (
     <>
       <div className="main-wrapper">
-
-      <Header />
+      <Layout>
       <main className="main-container">
         <div className="container-fluid">
           <h1 className="sncf-title mb-4">Bienvenue sur {displayName}</h1>
@@ -87,7 +87,9 @@ export default function Home() {
           </div>
         </div>
       </main>
+       </Layout>
       <Footer />
+     
     </div>
     <style jsx>{`
       .sncf-card {

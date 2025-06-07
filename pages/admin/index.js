@@ -123,10 +123,9 @@ export default function Admin() {
   ];
 
   return (
-    <div className={`app-container ${getThemeClass(logoUrl)}`}>
-      <div className="d-flex">
-        <Sidebar />
-        
+     <div className={`app-container ${getThemeClass(logoUrl)}`}>
+      <Sidebar/>
+       <div className="d-flex">        
         <main className="flex-grow-1 min-vh-100 bg-light">
           {/* Header */}
           <header className="bg-white shadow-sm mb-4 px-4 py-3">

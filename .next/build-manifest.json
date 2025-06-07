@@ -22,16 +22,6 @@
       "static/chunks/webpack.js",
       "static/chunks/main.js",
       "static/chunks/pages/_error.js"
-    ],
-    "/admin/gestion-horaires": [
-      "static/chunks/webpack.js",
-      "static/chunks/main.js",
-      "static/chunks/pages/admin/gestion-horaires.js"
-    ],
-    "/admin/horaires": [
-      "static/chunks/webpack.js",
-      "static/chunks/main.js",
-      "static/chunks/pages/admin/horaires.js"
     ]
   },
   "ampFirstPages": []

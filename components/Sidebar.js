@@ -102,30 +102,38 @@ export default function Sidebar() {
               <span>Horaires</span>
             </Link>
 
-            <Link 
-              href="/admin/gestion-horaires" 
-              className={`sncf-nav-link ${currentPath === '/admin/gestion-horaires' ? 'active' : ''}`}
-            >
-              <span className="material-icons">today</span>
-              <span>Panneau de Contrôle</span>
-            </Link>
+          <Link 
+            href="/admin/gestion-horaires" 
+            className={`sncf-nav-link ${currentPath === '/admin/gestion-horaires' ? 'active' : ''}`}
+          >
+            <span className="material-icons">today</span>
+            <span>Panneau de Contrôle</span>
+          </Link>
 
-            <Link 
-              href="/admin/info-trafics" 
-              className={`sncf-nav-link ${currentPath === '/admin/info-trafics' ? 'active' : ''}`}
-            >
-              <span className="material-icons">info</span>
-              <span>Infos Trafic</span>
-            </Link>
+          <Link 
+            href="/admin/gestion-actualites" 
+            className={`sncf-nav-link ${currentPath === '/admin/gestion-actualites' ? 'active' : ''}`}
+          >
+            <span className="material-icons">article</span>
+            <span>Gestion Actualités</span>
+          </Link>
 
-            <Link 
-              href="/admin/attribution-voie" 
-              className={`sncf-nav-link ${currentPath === '/admin/attribution-voie' ? 'active' : ''}`}
-            >
-              <span className="material-icons">alt_route</span>
-              <span>Attribution Voie</span>
-            </Link>
-          </div>
+          <Link 
+            href="/admin/info-trafics" 
+            className={`sncf-nav-link ${currentPath === '/admin/info-trafics' ? 'active' : ''}`}
+          >
+            <span className="material-icons">info</span>
+            <span>Infos Trafic</span>
+          </Link>
+
+          <Link 
+            href="/admin/attribution-voie" 
+            className={`sncf-nav-link ${currentPath === '/admin/attribution-voie' ? 'active' : ''}`}
+          >
+            <span className="material-icons">alt_route</span>
+            <span>Attribution Voie</span>
+          </Link>
+        </div>
 
           <div className="sncf-nav-section">
             <div className="sncf-nav-section-title">Annonces Sonores</div>
@@ -166,27 +174,35 @@ export default function Sidebar() {
                   <span>Liste annonces</span>
                 </Link>
               </div>
-            </div>
           </div>
+        </div>
 
-          <div className="sncf-nav-section">
-            <div className="sncf-nav-section-title">Système</div>
-            <Link 
-              href="/admin/sauvegarde" 
-              className={`sncf-nav-link ${currentPath === '/admin/sauvegarde' ? 'active' : ''}`}
-            >
-              <span className="material-icons">save</span>
-              <span>Sauvegarde</span>
-            </Link>
+        <div className="sncf-nav-section">
+          <div className="sncf-nav-section-title">Système</div>
+          <Link 
+            href="/admin/sauvegarde" 
+            className={`sncf-nav-link ${currentPath === '/admin/sauvegarde' ? 'active' : ''}`}
+          >
+            <span className="material-icons">save</span>
+            <span>Sauvegarde</span>
+          </Link>
 
-            <Link 
-              href="/admin/update" 
-              className={`sncf-nav-link ${currentPath === '/admin/update' ? 'active' : ''}`}
-            >
-              <span className="material-icons">system_update</span>
-              <span>Mise à jour</span>
-            </Link>
-          </div>
+          <Link 
+            href="/admin/admin-profile" 
+            className={`sncf-nav-link ${currentPath === '/admin/admin-profile' ? 'active' : ''}`}
+          >
+            <span className="material-icons">person</span>
+            <span>Profil Admin</span>
+          </Link>
+
+          <Link 
+            href="/admin/update" 
+            className={`sncf-nav-link ${currentPath === '/admin/update' ? 'active' : ''}`}
+          >
+            <span className="material-icons">system_update</span>
+            <span>Mise à jour</span>
+          </Link>
+        </div>
         </div>
       </div>
 
