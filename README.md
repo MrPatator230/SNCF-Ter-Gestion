@@ -33,6 +33,9 @@ En étant dans le dossier, on fait :
 
     npm install && npm run dev
 
+Ou pour une installation plus simple, vous pouvez exécuter le script d'installation fourni :
+
+    ./install.sh
 
 Enfin, l'url du projet s'affiche sur votre CLI.
 
