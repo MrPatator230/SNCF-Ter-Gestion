@@ -23,6 +23,31 @@
       "static/chunks/main.js",
       "static/chunks/pages/_error.js"
     ],
+    "/admin": [
+      "static/chunks/webpack.js",
+      "static/chunks/main.js",
+      "static/chunks/pages/admin.js"
+    ],
+    "/admin/affichage-voyageurs": [
+      "static/chunks/webpack.js",
+      "static/chunks/main.js",
+      "static/chunks/pages/admin/affichage-voyageurs.js"
+    ],
+    "/admin/entreprise": [
+      "static/chunks/webpack.js",
+      "static/chunks/main.js",
+      "static/chunks/pages/admin/entreprise.js"
+    ],
+    "/admin/horaires": [
+      "static/chunks/webpack.js",
+      "static/chunks/main.js",
+      "static/chunks/pages/admin/horaires.js"
+    ],
+    "/afficheurs": [
+      "static/chunks/webpack.js",
+      "static/chunks/main.js",
+      "static/chunks/pages/afficheurs.js"
+    ],
     "/afficheurs/departs": [
       "static/chunks/webpack.js",
       "static/chunks/main.js",

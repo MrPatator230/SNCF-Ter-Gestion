@@ -36,7 +36,7 @@ export default function Admin() {
   };
 
   useEffect(() => {
-    if (!isAuthenticated) {
+    if (isAuthenticated === false) {
       router.push('/admin/login');
     }
   }, [isAuthenticated, router]);
