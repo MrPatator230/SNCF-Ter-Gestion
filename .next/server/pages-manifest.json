@@ -1,0 +1,13 @@
+{
+  "/_app": "pages/_app.js",
+  "/_error": "pages/_error.js",
+  "/_document": "pages/_document.js",
+  "/afficheurs/arrivees": "pages/afficheurs/arrivees.js",
+  "/admin": "pages/admin.js",
+  "/admin/horaires": "pages/admin/horaires.js",
+  "/admin/affichage-voyageurs": "pages/admin/affichage-voyageurs.js",
+  "/afficheurs": "pages/afficheurs.js",
+  "/api/settings": "pages/api/settings.js",
+  "/afficheurs/departs": "pages/afficheurs/departs.js",
+  "/api/trainTypeLogos": "pages/api/trainTypeLogos.js"
+}
