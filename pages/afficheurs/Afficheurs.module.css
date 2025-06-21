@@ -531,9 +531,10 @@
 .rightSection {
   min-width: 60px;
   height: 50px;
-  background-color: white;
+  background-color: transparent;
+  border: 2px solid white;
   border-radius: 12px;
-  color: black;
+  color: white;
   font-weight: 900;
   font-size: 2.4rem;
   display: flex;
@@ -542,7 +543,7 @@
   margin-right: 60px;
   user-select: none;
   flex-shrink: 0;
-  box-shadow: 0 0 5px rgba(0,0,0,0.3);
+  box-shadow: none;
 }
 
 /* Adjust schedule row padding to accommodate vertical bar */
