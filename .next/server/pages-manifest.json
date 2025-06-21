@@ -2,9 +2,10 @@
   "/_app": "pages/_app.js",
   "/_error": "pages/_error.js",
   "/_document": "pages/_document.js",
-  "/": "pages/index.js",
-  "/api/settings": "pages/api/settings.js",
-  "/admin/horaires": "pages/admin/horaires.js",
   "/admin": "pages/admin.js",
-  "/login": "pages/login.js"
+  "/admin/[station]": "pages/admin/[station].js",
+  "/login": "pages/login.js",
+  "/api/settings": "pages/api/settings.js",
+  "/api/trainTypeLogos": "pages/api/trainTypeLogos.js",
+  "/admin/entreprise": "pages/admin/entreprise.js"
 }

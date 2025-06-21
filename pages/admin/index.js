@@ -9,6 +9,7 @@ import DashboardWidget from '../../components/admin/DashboardWidget';
 import RecentStats from '../../components/admin/RecentStats';
 import ActivityFeed from '../../components/admin/ActivityFeed';
 import styles from '../../styles/operatorColors.module.css';
+import * as localStorageUtil from '../../utils/localStorage';
 
 export default function Admin() {
   const { isAuthenticated } = useContext(AuthContext);
@@ -47,14 +48,14 @@ export default function Admin() {
     if (!authChecked) return;
 
     // Load stations data from localStorage
-    const savedStations = localStorage.getItem('stations');
+    const savedStations = localStorageUtil.getItem('stations');
     if (savedStations) {
       const stations = JSON.parse(savedStations);
       setStationCount(stations.length);
     }
 
     // Load schedules data from localStorage
-    const savedSchedules = localStorage.getItem('schedules');
+    const savedSchedules = localStorageUtil.getItem('schedules');
     if (savedSchedules) {
       const schedules = JSON.parse(savedSchedules);
       setScheduleCount(schedules.length);
