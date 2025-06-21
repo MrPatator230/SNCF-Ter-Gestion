@@ -27,6 +27,7 @@ export default function AfficheursPublic() {
   const [loading, setLoading] = useState(true);
   const [trainTypeLogos, setTrainTypeLogos] = useState({});
   const [displayIndex, setDisplayIndex] = useState(0);
+  const [showNextDay, setShowNextDay] = useState(false);
 
   useEffect(() => {
     let intervalId;
@@ -59,12 +60,28 @@ export default function AfficheursPublic() {
 
         // Filter out schedules whose departure time has passed
         const now = new Date();
-        const filteredByTime = filteredByDay.filter(schedule => {
+        let filteredByTime = filteredByDay.filter(schedule => {
           const displayTime = getStationTime(schedule, gare, 'departure');
           const [hours, minutes] = displayTime.split(':').map(Number);
           const departureDate = new Date(now.getFullYear(), now.getMonth(), now.getDate(), hours, minutes);
           return departureDate >= now;
         });
+
+        // If no schedules left for today, fetch for next day
+        if (filteredByTime.length === 0) {
+          const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+          const currentDayIndex = days.indexOf(currentDay);
+          const nextDay = days[(currentDayIndex + 1) % 7];
+          filteredByTime = filteredByType.filter(schedule => {
+            if (!schedule.joursCirculation || schedule.joursCirculation.length === 0) {
+              return true;
+            }
+            return schedule.joursCirculation.includes(nextDay);
+          });
+          setShowNextDay(true);
+        } else {
+          setShowNextDay(false);
+        }
 
         const sorted = sortSchedulesByTime(filteredByTime, gare, 'departures');
         setSchedules(sorted);

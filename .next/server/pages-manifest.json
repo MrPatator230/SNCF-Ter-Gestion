@@ -1,8 +1,1 @@
-{
-  "/_app": "pages/_app.js",
-  "/_error": "pages/_error.js",
-  "/_document": "pages/_document.js",
-  "/admin/entreprise": "pages/admin/entreprise.js",
-  "/admin/horaires": "pages/admin/horaires.js",
-  "/afficheurs/departs": "pages/afficheurs/departs.js"
-}
+{}
