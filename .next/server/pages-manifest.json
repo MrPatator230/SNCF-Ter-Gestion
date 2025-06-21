@@ -2,12 +2,9 @@
   "/_app": "pages/_app.js",
   "/_error": "pages/_error.js",
   "/_document": "pages/_document.js",
-  "/afficheurs/departs": "pages/afficheurs/departs.js",
-  "/admin/affichage-voyageurs": "pages/admin/affichage-voyageurs.js",
   "/": "pages/index.js",
-  "/login": "pages/login.js",
   "/api/settings": "pages/api/settings.js",
-  "/afficheurs": "pages/afficheurs.js",
-  "/api/trainTypeLogos": "pages/api/trainTypeLogos.js",
-  "/admin": "pages/admin.js"
+  "/admin/horaires": "pages/admin/horaires.js",
+  "/admin": "pages/admin.js",
+  "/login": "pages/login.js"
 }

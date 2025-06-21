@@ -33,20 +33,10 @@
       "static/chunks/main.js",
       "static/chunks/pages/admin.js"
     ],
-    "/admin/affichage-voyageurs": [
+    "/admin/horaires": [
       "static/chunks/webpack.js",
       "static/chunks/main.js",
-      "static/chunks/pages/admin/affichage-voyageurs.js"
-    ],
-    "/afficheurs": [
-      "static/chunks/webpack.js",
-      "static/chunks/main.js",
-      "static/chunks/pages/afficheurs.js"
-    ],
-    "/afficheurs/departs": [
-      "static/chunks/webpack.js",
-      "static/chunks/main.js",
-      "static/chunks/pages/afficheurs/departs.js"
+      "static/chunks/pages/admin/horaires.js"
     ],
     "/login": [
       "static/chunks/webpack.js",

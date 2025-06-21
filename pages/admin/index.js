@@ -27,6 +27,7 @@ export default function Admin() {
   const [scheduleCount, setScheduleCount] = useState(0);
   const [onTimeRatio, setOnTimeRatio] = useState(null);
   const [activities, setActivities] = useState([]);
+  const [authChecked, setAuthChecked] = useState(false);
 
   const getThemeClass = (logoUrl) => {
     if (!logoUrl) return '';
@@ -38,6 +39,8 @@ export default function Admin() {
   useEffect(() => {
     if (isAuthenticated === false) {
       router.push('/admin/login');
+    } else if (isAuthenticated === true) {
+      setAuthChecked(true);
     }
   }, [isAuthenticated, router]);
 
@@ -83,7 +86,7 @@ export default function Admin() {
     ]);
   }, []);
 
-  if (!isAuthenticated) {
+  if (!authChecked) {
     return null;
   }
 
