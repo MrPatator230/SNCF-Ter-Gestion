@@ -1,6 +1,5 @@
 import { useEffect, useContext, useState } from 'react';
 import { useRouter } from 'next/router';
-import Link from 'next/link';
 import Image from 'next/image';
 import { AuthContext } from '../../src/contexts/AuthContext';
 import { SettingsContext } from '../../contexts/SettingsContext';
@@ -13,21 +12,21 @@ import styles from '../../styles/operatorColors.module.css';
 
 export default function Admin() {
   const { isAuthenticated } = useContext(AuthContext);
-  const { 
-    logoUrl, 
-    appName, 
+  const {
+    logoUrl,
+    appName,
     companyName,
     primaryColor,
     secondaryColor,
-    buttonStyle 
+    buttonStyle,
   } = useContext(SettingsContext);
 
   const router = useRouter();
+  const [authChecked, setAuthChecked] = useState(false);
   const [stationCount, setStationCount] = useState(0);
   const [scheduleCount, setScheduleCount] = useState(0);
   const [onTimeRatio, setOnTimeRatio] = useState(null);
   const [activities, setActivities] = useState([]);
-  const [authChecked, setAuthChecked] = useState(false);
 
   const getThemeClass = (logoUrl) => {
     if (!logoUrl) return '';
@@ -45,14 +44,16 @@ export default function Admin() {
   }, [isAuthenticated, router]);
 
   useEffect(() => {
-    // Charger les données des stations
+    if (!authChecked) return;
+
+    // Load stations data from localStorage
     const savedStations = localStorage.getItem('stations');
     if (savedStations) {
       const stations = JSON.parse(savedStations);
       setStationCount(stations.length);
     }
 
-    // Charger les données des horaires
+    // Load schedules data from localStorage
     const savedSchedules = localStorage.getItem('schedules');
     if (savedSchedules) {
       const schedules = JSON.parse(savedSchedules);
@@ -60,31 +61,31 @@ export default function Admin() {
       setOnTimeRatio(98);
     }
 
-    // Simuler des activités récentes
+    // Simulate recent activities
     setActivities([
       {
         title: 'Nouvelle annonce créée',
         time: 'Il y a 5 minutes',
         icon: 'campaign',
         color: 'primary',
-        description: 'Annonce de retard pour le TER 857412'
+        description: 'Annonce de retard pour le TER 857412',
       },
       {
         title: 'Horaire modifié',
         time: 'Il y a 15 minutes',
         icon: 'schedule',
         color: 'warning',
-        description: 'Modification de l\'horaire du train Paris-Lyon'
+        description: "Modification de l'horaire du train Paris-Lyon",
       },
       {
         title: 'Nouvelle station ajoutée',
         time: 'Il y a 1 heure',
         icon: 'train',
         color: 'success',
-        description: 'Station "Gare de Lyon-Part-Dieu" ajoutée'
-      }
+        description: 'Station "Gare de Lyon-Part-Dieu" ajoutée',
+      },
     ]);
-  }, []);
+  }, [authChecked]);
 
   if (!authChecked) {
     return null;
@@ -97,7 +98,7 @@ export default function Admin() {
       icon: 'trending_up',
       color: 'success',
       change: 12,
-      subtitle: 'Trains en circulation aujourd\'hui'
+      subtitle: "Trains en circulation aujourd'hui",
     },
     {
       title: 'Ponctualité',
@@ -105,7 +106,7 @@ export default function Admin() {
       icon: 'timer',
       color: 'primary',
       change: 3,
-      subtitle: 'Moyenne sur les 30 derniers jours'
+      subtitle: 'Moyenne sur les 30 derniers jours',
     },
     {
       title: 'Annonces Diffusées',
@@ -113,7 +114,7 @@ export default function Admin() {
       icon: 'campaign',
       color: 'info',
       change: 8,
-      subtitle: 'Dernières 24 heures'
+      subtitle: 'Dernières 24 heures',
     },
     {
       title: 'Alertes Actives',
@@ -121,14 +122,14 @@ export default function Admin() {
       icon: 'warning',
       color: 'warning',
       change: -25,
-      subtitle: 'Perturbations en cours'
-    }
+      subtitle: 'Perturbations en cours',
+    },
   ];
 
   return (
-     <div className={`app-container ${getThemeClass(logoUrl)}`}>
-      <Sidebar/>
-       <div className="d-flex">        
+    <div className={`app-container ${getThemeClass(logoUrl)}`}>
+      <Sidebar />
+      <div className="d-flex">
         <main className="flex-grow-1 min-vh-100 bg-light">
           {/* Header */}
           <header className="bg-white shadow-sm mb-4 px-4 py-3">
@@ -154,9 +155,12 @@ export default function Admin() {
             {/* Quick Stats */}
             <div className="row g-4 mb-4">
               <div className="col-xl-3 col-md-6">
-                <div className="card border-0 shadow-sm h-100" style={{
-                  borderRadius: buttonStyle === 'rounded' ? '15px' : '4px'
-                }}>
+                <div
+                  className="card border-0 shadow-sm h-100"
+                  style={{
+                    borderRadius: buttonStyle === 'rounded' ? '15px' : '4px',
+                  }}
+                >
                   <div className="card-body">
                     <DashboardWidget
                       title="Nombre de gares"
@@ -169,9 +173,12 @@ export default function Admin() {
                 </div>
               </div>
               <div className="col-xl-3 col-md-6">
-                <div className="card border-0 shadow-sm h-100" style={{
-                  borderRadius: buttonStyle === 'rounded' ? '15px' : '4px'
-                }}>
+                <div
+                  className="card border-0 shadow-sm h-100"
+                  style={{
+                    borderRadius: buttonStyle === 'rounded' ? '15px' : '4px',
+                  }}
+                >
                   <div className="card-body">
                     <DashboardWidget
                       title="Horaires créés"
@@ -184,9 +191,12 @@ export default function Admin() {
                 </div>
               </div>
               <div className="col-xl-3 col-md-6">
-                <div className="card border-0 shadow-sm h-100" style={{
-                  borderRadius: buttonStyle === 'rounded' ? '15px' : '4px'
-                }}>
+                <div
+                  className="card border-0 shadow-sm h-100"
+                  style={{
+                    borderRadius: buttonStyle === 'rounded' ? '15px' : '4px',
+                  }}
+                >
                   <div className="card-body">
                     <DashboardWidget
                       title="Ratio de ponctualité"
@@ -197,55 +207,70 @@ export default function Admin() {
                   </div>
                 </div>
               </div>
-            <div className="col-xl-3 col-md-6">
-              <div className="card border-0 shadow-sm h-100" style={{
-                borderRadius: buttonStyle === 'rounded' ? '15px' : '4px'
-              }}>
-                <div className="card-body">
-                  <DashboardWidget
-                    title="Système d'annonces"
-                    value="Accéder"
-                    icon="campaign"
-                    color={primaryColor}
-                    onClick={() => router.push('/admin/banque-de-sons')}
-                  />
+              <div className="col-xl-3 col-md-6">
+                <div
+                  className="card border-0 shadow-sm h-100"
+                  style={{
+                    borderRadius: buttonStyle === 'rounded' ? '15px' : '4px',
+                  }}
+                >
+                  <div className="card-body">
+                    <DashboardWidget
+                      title="Système d'annonces"
+                      value="Accéder"
+                      icon="campaign"
+                      color={primaryColor}
+                      onClick={() => router.push('/admin/banque-de-sons')}
+                    />
+                  </div>
                 </div>
               </div>
-            </div>
-            <div className="col-xl-3 col-md-6">
-              <div className="card border-0 shadow-sm h-100" style={{
-                borderRadius: buttonStyle === 'rounded' ? '15px' : '4px'
-              }}>
-                <div className="card-body">
-                  <DashboardWidget
-                    title="Affichage Voyageurs"
-                    value="Accéder"
-                    icon="schedule"
-                    color={primaryColor}
-                    onClick={() => router.push('/admin/affichage-voyageurs')}
-                  />
+              <div className="col-xl-3 col-md-6">
+                <div
+                  className="card border-0 shadow-sm h-100"
+                  style={{
+                    borderRadius: buttonStyle === 'rounded' ? '15px' : '4px',
+                  }}
+                >
+                  <div className="card-body">
+                    <DashboardWidget
+                      title="Affichage Voyageurs"
+                      value="Accéder"
+                      icon="schedule"
+                      color={primaryColor}
+                      onClick={() => router.push('/admin/affichage-voyageurs')}
+                    />
+                  </div>
                 </div>
               </div>
-            </div>
             </div>
 
             {/* Stats and Activity Feed */}
             <div className="row g-4">
               <div className="col-lg-8">
-                <div className="card border-0 shadow-sm" style={{
-                  borderRadius: buttonStyle === 'rounded' ? '15px' : '4px'
-                }}>
+                <div
+                  className="card border-0 shadow-sm"
+                  style={{
+                    borderRadius: buttonStyle === 'rounded' ? '15px' : '4px',
+                  }}
+                >
                   <div className="card-body">
                     <RecentStats stats={stats} primaryColor={primaryColor} />
                   </div>
                 </div>
               </div>
               <div className="col-lg-4">
-                <div className="card border-0 shadow-sm" style={{
-                  borderRadius: buttonStyle === 'rounded' ? '15px' : '4px'
-                }}>
+                <div
+                  className="card border-0 shadow-sm"
+                  style={{
+                    borderRadius: buttonStyle === 'rounded' ? '15px' : '4px',
+                  }}
+                >
                   <div className="card-body">
-                    <ActivityFeed activities={activities} primaryColor={primaryColor} />
+                    <ActivityFeed
+                      activities={activities}
+                      primaryColor={primaryColor}
+                    />
                   </div>
                 </div>
               </div>
@@ -259,11 +284,11 @@ export default function Admin() {
           min-height: 100vh;
           background-color: #f8f9fa;
         }
-        
+
         .card {
           transition: transform 0.2s;
         }
-        
+
         .card:hover {
           transform: translateY(-5px);
         }
