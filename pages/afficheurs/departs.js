@@ -57,7 +57,16 @@ export default function AfficheursPublic() {
           return schedule.joursCirculation.includes(currentDay);
         });
 
-        const sorted = sortSchedulesByTime(filteredByDay, gare, 'departures');
+        // Filter out schedules whose departure time has passed
+        const now = new Date();
+        const filteredByTime = filteredByDay.filter(schedule => {
+          const displayTime = getStationTime(schedule, gare, 'departure');
+          const [hours, minutes] = displayTime.split(':').map(Number);
+          const departureDate = new Date(now.getFullYear(), now.getMonth(), now.getDate(), hours, minutes);
+          return departureDate >= now;
+        });
+
+        const sorted = sortSchedulesByTime(filteredByTime, gare, 'departures');
         setSchedules(sorted);
         setLoading(false);
       } else {
