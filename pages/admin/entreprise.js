@@ -111,8 +111,6 @@ export default function Entreprise() {
   // Save train types and logos to API
   const saveTrainTypesAndLogos = async (updatedTrainTypes, updatedLogos) => {
     try {
-      // Save train types to localStorage as before
-      localStorage.setItem('trainTypes', JSON.stringify(updatedTrainTypes));
       setTrainTypes(updatedTrainTypes);
 
       // Save logos JSON to API
@@ -207,25 +205,6 @@ export default function Entreprise() {
 
   const router = useRouter();
 
-  useEffect(() => {
-    const savedTrainTypes = localStorage.getItem('trainTypes');
-    if (savedTrainTypes) {
-      setTrainTypes(JSON.parse(savedTrainTypes));
-    }
-  }, []);
-
-  const updateTrainTypeNameOnly = (index, value) => {
-    const updatedTypes = [...trainTypes];
-    updatedTypes[index] = value;
-    setTrainTypes(updatedTypes);
-    localStorage.setItem('trainTypes', JSON.stringify(updatedTypes));
-  };
-
-  const removeTrainTypeNameOnly = (index) => {
-    const updatedTypes = trainTypes.filter((_, i) => i !== index);
-    setTrainTypes(updatedTypes);
-    localStorage.setItem('trainTypes', JSON.stringify(updatedTypes));
-  };
 
   // Function to get CSS style string based on logo URL
   const getCssForLogo = (logo) => {

@@ -1,0 +1,127 @@
+-- Table to store entreprise settings
+CREATE TABLE IF NOT EXISTS entreprise (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  companyName VARCHAR(255) NOT NULL,
+  companySlogan VARCHAR(255) NOT NULL,
+  companyDescription TEXT NOT NULL,
+  primaryColor VARCHAR(7) NOT NULL,
+  secondaryColor VARCHAR(7) NOT NULL,
+  accentColor VARCHAR(7) NOT NULL,
+  appName VARCHAR(255) NOT NULL,
+  logoUrl VARCHAR(255) NOT NULL,
+  faviconUrl VARCHAR(255) NOT NULL,
+  fontFamily VARCHAR(100) NOT NULL,
+  buttonStyle VARCHAR(50) NOT NULL,
+  headerStyle VARCHAR(50) NOT NULL,
+  footerContent TEXT NOT NULL,
+  footerRegions JSON NOT NULL,
+  customCss TEXT NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+-- Table to store train types and their logos
+CREATE TABLE IF NOT EXISTS train_types (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  name VARCHAR(255) NOT NULL UNIQUE,
+  logoUrl VARCHAR(255) NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+-- Table to store stations (gares)
+CREATE TABLE IF NOT EXISTS stations (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  name VARCHAR(255) NOT NULL UNIQUE,
+  code VARCHAR(50) NOT NULL UNIQUE,
+  city VARCHAR(255),
+  region VARCHAR(255),
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+-- Table to store schedules (horaires)
+CREATE TABLE IF NOT EXISTS schedules (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  station_id INT NOT NULL,
+  train_number VARCHAR(50) NOT NULL,
+  arrival_time TIME,
+  departure_time TIME,
+  platform VARCHAR(50),
+  destination VARCHAR(255),
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  FOREIGN KEY (station_id) REFERENCES stations(id) ON DELETE CASCADE
+);
+
+-- Table to store platform assignments (attribution des quais)
+CREATE TABLE IF NOT EXISTS platform_assignments (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  station_id INT NOT NULL,
+  platform VARCHAR(50) NOT NULL,
+  train_number VARCHAR(50) NOT NULL,
+  assigned_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  FOREIGN KEY (station_id) REFERENCES stations(id) ON DELETE CASCADE
+);
+
+-- Table to store news (actualités)
+CREATE TABLE IF NOT EXISTS news (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  title VARCHAR(255) NOT NULL,
+  content TEXT NOT NULL,
+  author VARCHAR(255),
+  published_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+-- Table to store traffic info (infos traffics)
+CREATE TABLE IF NOT EXISTS traffic_info (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  title VARCHAR(255) NOT NULL,
+  description TEXT NOT NULL,
+  region VARCHAR(255),
+  reported_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+-- Table to store ticketing (billetique)
+CREATE TABLE IF NOT EXISTS tickets (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  user_id INT NOT NULL,
+  train_number VARCHAR(50) NOT NULL,
+  departure_station_id INT NOT NULL,
+  arrival_station_id INT NOT NULL,
+  departure_time DATETIME NOT NULL,
+  arrival_time DATETIME NOT NULL,
+  seat_number VARCHAR(50),
+  price DECIMAL(10, 2) NOT NULL,
+  status VARCHAR(50) NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  FOREIGN KEY (departure_station_id) REFERENCES stations(id),
+  FOREIGN KEY (arrival_station_id) REFERENCES stations(id)
+);
+
+-- Table to store train compositions (composition de trains)
+CREATE TABLE IF NOT EXISTS train_compositions (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  train_number VARCHAR(50) NOT NULL,
+  composition JSON NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+-- Table to store users for authentication (connexion / inscription)
+CREATE TABLE IF NOT EXISTS users (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  username VARCHAR(255) NOT NULL UNIQUE,
+  email VARCHAR(255) NOT NULL UNIQUE,
+  password_hash VARCHAR(255) NOT NULL,
+  role VARCHAR(50) DEFAULT 'user',
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
