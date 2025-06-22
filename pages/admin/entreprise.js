@@ -78,12 +78,17 @@ export default function Entreprise() {
   useEffect(() => {
     async function fetchTrainTypeLogos() {
       try {
-        const res = await fetch('/api/trainTypeLogos');
+        const res = await fetch('/api/trainTypes');
         if (res.ok) {
           const data = await res.json();
-          setTrainTypeLogos(data);
-          // Sync trainTypes array with keys of trainTypeLogos
-          setTrainTypes(Object.keys(data));
+          const logos = {};
+          const types = [];
+          data.forEach(item => {
+            types.push(item.typeName);
+            logos[item.typeName] = item.logoUrl;
+          });
+          setTrainTypeLogos(logos);
+          setTrainTypes(types);
         }
       } catch (error) {
         console.error('Failed to fetch train type logos:', error);
@@ -91,6 +96,40 @@ export default function Entreprise() {
     }
     fetchTrainTypeLogos();
   }, []);
+<<<<<<< SEARCH
+  useEffect(() => {
+    const savedTrainTypes = localStorage.getItem('trainTypes');
+    if (savedTrainTypes) {
+      setTrainTypes(JSON.parse(savedTrainTypes));
+    }
+  }, []);
+
+  const updateTrainTypeNameOnly = (index, value) => {
+    const updatedTypes = [...trainTypes];
+    updatedTypes[index] = value;
+    setTrainTypes(updatedTypes);
+    localStorage.setItem('trainTypes', JSON.stringify(updatedTypes));
+  };
+
+  const removeTrainTypeNameOnly = (index) => {
+    const updatedTypes = trainTypes.filter((_, i) => i !== index);
+    setTrainTypes(updatedTypes);
+    localStorage.setItem('trainTypes', JSON.stringify(updatedTypes));
+  };
+=======
+  useEffect(() => {
+  }, []);
+
+  const updateTrainTypeNameOnly = (index, value) => {
+    const updatedTypes = [...trainTypes];
+    updatedTypes[index] = value;
+    setTrainTypes(updatedTypes);
+  };
+
+  const removeTrainTypeNameOnly = (index) => {
+    const updatedTypes = trainTypes.filter((_, i) => i !== index);
+    setTrainTypes(updatedTypes);
+  };
 
   // Fetch available logos from data.json
   useEffect(() => {
@@ -108,23 +147,27 @@ export default function Entreprise() {
     fetchAvailableLogos();
   }, []);
 
+
   // Save train types and logos to API
   const saveTrainTypesAndLogos = async (updatedTrainTypes, updatedLogos) => {
     try {
-      // Save train types to localStorage as before
-      localStorage.setItem('trainTypes', JSON.stringify(updatedTrainTypes));
-      setTrainTypes(updatedTrainTypes);
+      // Prepare data for API
+      const trainTypesData = updatedTrainTypes.map(type => ({
+        typeName: type,
+        logoUrl: updatedLogos[type] || '/images/logo-types-trains/default-logo.svg',
+      }));
 
-      // Save logos JSON to API
-      const res = await fetch('/api/trainTypeLogos', {
+      // Save train types and logos to API
+      const res = await fetch('/api/trainTypes', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(updatedLogos),
+        body: JSON.stringify(trainTypesData),
       });
       if (res.ok) {
+        setTrainTypes(updatedTrainTypes);
         setTrainTypeLogos(updatedLogos);
       } else {
-        console.error('Failed to save train type logos');
+        console.error('Failed to save train types and logos');
       }
     } catch (error) {
       console.error('Error saving train types and logos:', error);

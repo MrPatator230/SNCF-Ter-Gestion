@@ -9,32 +9,27 @@ export const extractStationsFromSchedule = (schedule) => {
   return Array.from(stations);
 };
 
-// Fonction pour mettre à jour la liste des gares dans localStorage
-export const updateStationsFromSchedule = (schedule) => {
+// Fonction pour mettre à jour la liste des gares dans la base de données MySQL via API
+export const updateStationsFromSchedule = async (schedule) => {
   if (typeof window === 'undefined') return;
 
-  // Récupérer les gares existantes
-  const existingStations = JSON.parse(localStorage.getItem('stations') || '[]');
+  // Récupérer les gares existantes depuis l'API
+  const res = await fetch('/api/stations');
+  const existingStations = await res.json();
   const existingStationNames = new Set(existingStations.map(s => s.name));
 
   // Extraire les gares de l'horaire
   const scheduleStations = extractStationsFromSchedule(schedule);
 
-  // Ajouter les nouvelles gares
-  let hasNewStations = false;
-  scheduleStations.forEach(stationName => {
+  // Ajouter les nouvelles gares via l'API
+  for (const stationName of scheduleStations) {
     if (!existingStationNames.has(stationName)) {
-      existingStations.push({
-        name: stationName,
-        createdAt: new Date().toISOString()
+      await fetch('/api/stations', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: stationName }),
       });
-      hasNewStations = true;
     }
-  });
-
-  // Sauvegarder si de nouvelles gares ont été ajoutées
-  if (hasNewStations) {
-    localStorage.setItem('stations', JSON.stringify(existingStations));
   }
 };
 
@@ -45,30 +40,33 @@ export const updateStationsFromSchedules = (schedules) => {
 };
 
 // Fonction pour ajouter une nouvelle gare
-export const addStation = (stationName) => {
+export const addStation = async (stationName) => {
   if (typeof window === 'undefined' || !stationName) return false;
 
-  const existingStations = JSON.parse(localStorage.getItem('stations') || '[]');
+  // Vérifier si la gare existe déjà
+  const res = await fetch('/api/stations');
+  const existingStations = await res.json();
   if (!existingStations.some(s => s.name === stationName)) {
-    existingStations.push({
-      name: stationName,
-      createdAt: new Date().toISOString()
+    await fetch('/api/stations', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name: stationName }),
     });
-    localStorage.setItem('stations', JSON.stringify(existingStations));
     return true;
   }
   return false;
 };
 
 // Fonction pour récupérer toutes les gares
-export const getAllStations = () => {
+export const getAllStations = async () => {
   if (typeof window === 'undefined') return [];
-  return JSON.parse(localStorage.getItem('stations') || '[]');
+  const res = await fetch('/api/stations');
+  return await res.json();
 };
 
 // Fonction pour vérifier si une gare existe
-export const stationExists = (stationName) => {
+export const stationExists = async (stationName) => {
   if (typeof window === 'undefined' || !stationName) return false;
-  const stations = getAllStations();
+  const stations = await getAllStations();
   return stations.some(s => s.name === stationName);
 };

@@ -1,7 +1,8 @@
 // Fonction pour récupérer tous les horaires
-export const getAllSchedules = () => {
+export const getAllSchedules = async () => {
   if (typeof window === 'undefined') return [];
-  return JSON.parse(localStorage.getItem('schedules') || '[]');
+  const res = await fetch('/api/schedules');
+  return await res.json();
 };
 
 // Fonction pour valider un horaire
@@ -249,18 +250,18 @@ export const sortSchedulesByTime = (schedules, stationName, type = 'departures')
   }
 };
 
-// Fonction pour mettre à jour un horaire existant dans localStorage
-export const updateSchedule = (id, updatedSchedule) => {
+// Fonction pour mettre à jour un horaire existant dans la base de données MySQL via API
+export const updateSchedule = async (id, updatedSchedule) => {
   if (typeof window === 'undefined') return;
 
-  const schedules = JSON.parse(localStorage.getItem('schedules') || '[]');
-  const index = schedules.findIndex(schedule => schedule.id === id);
-  if (index !== -1) {
-    // Merge existing schedule with updatedSchedule, including quai, delayMinutes, isCancelled
-    schedules[index] = { ...schedules[index], ...updatedSchedule, id };
-    localStorage.setItem('schedules', JSON.stringify(schedules));
-  } else {
-    console.warn(`Schedule with id ${id} not found for update.`);
+  const res = await fetch('/api/schedules', {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ id, ...updatedSchedule }),
+  });
+
+  if (!res.ok) {
+    console.warn(`Failed to update schedule with id ${id}`);
   }
 };
 
@@ -276,24 +277,34 @@ export const resetDelaysAndCancellations = () => {
   localStorage.setItem('schedules', JSON.stringify(updatedSchedules));
 };
 
+
 /**
  * Fonction pour ajouter un nouvel horaire
  * @param {Object} schedule - L'objet horaire à ajouter
  */
-export const addSchedule = (schedule) => {
+export const addSchedule = async (schedule) => {
   if (typeof window === 'undefined') return;
 
-  const schedules = JSON.parse(localStorage.getItem('schedules') || '[]');
-  const newSchedule = { ...schedule, id: Date.now() };
-  schedules.push(newSchedule);
-  localStorage.setItem('schedules', JSON.stringify(schedules));
+  const res = await fetch('/api/schedules', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(schedule),
+  });
+
+  if (!res.ok) {
+    console.warn('Failed to add schedule');
+  }
 };
 
 // Fonction pour supprimer un horaire par id
-export const deleteSchedule = (id) => {
+export const deleteSchedule = async (id) => {
   if (typeof window === 'undefined') return;
 
-  const schedules = JSON.parse(localStorage.getItem('schedules') || '[]');
-  const filteredSchedules = schedules.filter(schedule => schedule.id !== id);
-  localStorage.setItem('schedules', JSON.stringify(filteredSchedules));
+  const res = await fetch(`/api/schedules?id=${id}`, {
+    method: 'DELETE',
+  });
+
+  if (!res.ok) {
+    console.warn(`Failed to delete schedule with id ${id}`);
+  }
 };
