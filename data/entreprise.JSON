@@ -1,0 +1,17 @@
+{
+  "companyName": "SNCF Voyageurs // TER Bourgogne - Franche-Comté",
+  "companySlogan": "Le transport ferroviaire simplifié",
+  "companyDescription": "Description de la société ferroviaire...",
+  "primaryColor": "#006828",
+  "secondaryColor": "#9fbd09",
+  "accentColor": "#28a745",
+  "appName": "Train Schedule Management",
+  "logoUrl": "/images/logo-ter-mobigo.svg",
+  "faviconUrl": "favicon.ico",
+  "fontFamily": "Inter",
+  "buttonStyle": "rounded",
+  "headerStyle": "default",
+  "footerContent": "© 2025 Ma Société Ferroviaire",
+  "footerRegions": [],
+  "customCss": ""
+}I confirm 

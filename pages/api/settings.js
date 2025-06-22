@@ -1,7 +1,8 @@
 import fs from 'fs';
 import path from 'path';
 
-const settingsFilePath = path.join(process.cwd(), 'settings.json');
+const dataDir = path.join(process.cwd(), 'data');
+const settingsFilePath = path.join(dataDir, 'entreprise.JSON');
 
 export default function handler(req, res) {
   if (req.method === 'GET') {
@@ -27,7 +28,9 @@ export default function handler(req, res) {
   } else if (req.method === 'POST') {
     try {
       const settings = req.body;
-      console.log('Received settings:', settings);
+      if (!fs.existsSync(dataDir)) {
+        fs.mkdirSync(dataDir);
+      }
       fs.writeFileSync(settingsFilePath, JSON.stringify(settings, null, 2));
       res.status(200).json({ message: 'Settings saved successfully' });
     } catch (error) {
